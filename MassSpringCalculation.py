@@ -40,22 +40,24 @@ def equationOfMotion(mass,damping,stiffness,x_atZero,xPrim_atZero):
     # Take inputs and turn them to outputs
     x_vals = numerical_function(t_vals)
     # print them just to see
-    for num in x_vals:
-        print(num)
+    """for num in x_vals:
+        print(num)"""
+    naturalFrequency = np.sqrt((stiffness/mass)-(damping**2/(2*mass**2)))
     # return the x_vals the t_vals and the symbolic RHS (done for ploting purposes) in a tuple
-    return x_vals,t_vals,rightHandSide
+    return x_vals,t_vals,rightHandSide,naturalFrequency
 
 if __name__ == "__main__":
     eq = equationOfMotion(1,0,2,0,6)
     #rhs = eq.rhs
     #numerical_function = sp.lambdify(t, rhs, 'numpy')
-
+    
 
     # Define the range of t values , 400 points between 0-100 (with some numerical errors)
     #t_vals = np.linspace(0, 100, 400)
     # Evaluate the numerical function this outputs a list of x points for every time value
     #x_vals = numerical_function(t_vals)
 
+    print(eq[3])
     # Create the plot
     plt.figure(figsize=(8, 8))
     stringRHS = str(eq[2])

@@ -1,11 +1,16 @@
+import json
 import numpy as np
 from manim import *
 from MassSpringCalculation import equationOfMotion
 
 
 
+
+
+
+
 class massSpring(Scene):
-    
+
     # Functions to define the shape of the spring
     def springShape(self,x):
         # returns the shape of the spring (a sin wave)
@@ -17,6 +22,7 @@ class massSpring(Scene):
     
     # The scence itself
     def construct(self):
+
         # Objects in scence
         spring = ParametricFunction(self.springShape,
                                 t_range=self.springLength(-4*TAU,4.1*TAU)).align_to(np.array([-7,0,0]), np.array([-1,0,0]))
@@ -42,17 +48,25 @@ class massSpring(Scene):
             shiftXNEW = newValueTracker.get_value()
             # if you want to keep the motion on the screen activate("clampedX = np.clip(shiftXNEW, -7, 7)") this (and set mass.setx(clampedX)) maybe it wasnt working last time
             mass.set_x(shiftXNEW)
+
         
+
         # Adds objects to the scence
         self.add(mass)
         self.add(spring)
+        
 
         # Add the updater of each respective object
         spring.add_updater(springUpdater)
         mass.add_updater(massUpdater)        
         
+        # precalculated values to move to based on the equation of motion calulator
         mass.move_to(np.array([0,0,0]))
-        x_vals = equationOfMotion(1,0,2,0,6)
+                # Open up the params
+        with open("config.json") as f:
+            params = json.load(f)
+
+        x_vals = equationOfMotion(int(params["mass"]),int(params["damping"]),int(params["stiffness"]),int(params["x0"]),int(params["v0"]))
               
         #calling the numerical values of x(t) and setting the valueTracker = x(t) and that drives the motion of the scence
         # THIS DRIVE THE MOTION OF THE SCENCE!
